@@ -11,7 +11,17 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
+import { Route as DashboardVideoRouteImport } from './routes/dashboard/video'
+import { Route as DashboardBillingRouteImport } from './routes/dashboard/billing'
+import { Route as ApiWebhooksWaffoRouteImport } from './routes/api/webhooks/waffo'
+import { Route as ApiVideoTasksRouteImport } from './routes/api/video/tasks'
+import { Route as ApiVideoModelsRouteImport } from './routes/api/video/models'
+import { Route as ApiBillingPlansRouteImport } from './routes/api/billing/plans'
+import { Route as ApiBillingOrdersRouteImport } from './routes/api/billing/orders'
+import { Route as ApiBillingCheckoutRouteImport } from './routes/api/billing/checkout'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
+import { Route as ApiVideoTasksTaskIdRouteImport } from './routes/api/video/tasks.$taskId'
+import { Route as ApiVideoTasksTaskIdDownloadRouteImport } from './routes/api/video/tasks.$taskId.download'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -23,40 +33,169 @@ const DashboardIndexRoute = DashboardIndexRouteImport.update({
   path: '/dashboard/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardVideoRoute = DashboardVideoRouteImport.update({
+  id: '/dashboard/video',
+  path: '/dashboard/video',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardBillingRoute = DashboardBillingRouteImport.update({
+  id: '/dashboard/billing',
+  path: '/dashboard/billing',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiWebhooksWaffoRoute = ApiWebhooksWaffoRouteImport.update({
+  id: '/api/webhooks/waffo',
+  path: '/api/webhooks/waffo',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiVideoTasksRoute = ApiVideoTasksRouteImport.update({
+  id: '/api/video/tasks',
+  path: '/api/video/tasks',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiVideoModelsRoute = ApiVideoModelsRouteImport.update({
+  id: '/api/video/models',
+  path: '/api/video/models',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiBillingPlansRoute = ApiBillingPlansRouteImport.update({
+  id: '/api/billing/plans',
+  path: '/api/billing/plans',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiBillingOrdersRoute = ApiBillingOrdersRouteImport.update({
+  id: '/api/billing/orders',
+  path: '/api/billing/orders',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiBillingCheckoutRoute = ApiBillingCheckoutRouteImport.update({
+  id: '/api/billing/checkout',
+  path: '/api/billing/checkout',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiVideoTasksTaskIdRoute = ApiVideoTasksTaskIdRouteImport.update({
+  id: '/$taskId',
+  path: '/$taskId',
+  getParentRoute: () => ApiVideoTasksRoute,
+} as any)
+const ApiVideoTasksTaskIdDownloadRoute =
+  ApiVideoTasksTaskIdDownloadRouteImport.update({
+    id: '/download',
+    path: '/download',
+    getParentRoute: () => ApiVideoTasksTaskIdRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/dashboard/billing': typeof DashboardBillingRoute
+  '/dashboard/video': typeof DashboardVideoRoute
   '/dashboard': typeof DashboardIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/billing/checkout': typeof ApiBillingCheckoutRoute
+  '/api/billing/orders': typeof ApiBillingOrdersRoute
+  '/api/billing/plans': typeof ApiBillingPlansRoute
+  '/api/video/models': typeof ApiVideoModelsRoute
+  '/api/video/tasks': typeof ApiVideoTasksRouteWithChildren
+  '/api/webhooks/waffo': typeof ApiWebhooksWaffoRoute
+  '/api/video/tasks/$taskId': typeof ApiVideoTasksTaskIdRouteWithChildren
+  '/api/video/tasks/$taskId/download': typeof ApiVideoTasksTaskIdDownloadRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/dashboard/billing': typeof DashboardBillingRoute
+  '/dashboard/video': typeof DashboardVideoRoute
   '/dashboard': typeof DashboardIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/billing/checkout': typeof ApiBillingCheckoutRoute
+  '/api/billing/orders': typeof ApiBillingOrdersRoute
+  '/api/billing/plans': typeof ApiBillingPlansRoute
+  '/api/video/models': typeof ApiVideoModelsRoute
+  '/api/video/tasks': typeof ApiVideoTasksRouteWithChildren
+  '/api/webhooks/waffo': typeof ApiWebhooksWaffoRoute
+  '/api/video/tasks/$taskId': typeof ApiVideoTasksTaskIdRouteWithChildren
+  '/api/video/tasks/$taskId/download': typeof ApiVideoTasksTaskIdDownloadRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/dashboard/billing': typeof DashboardBillingRoute
+  '/dashboard/video': typeof DashboardVideoRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/billing/checkout': typeof ApiBillingCheckoutRoute
+  '/api/billing/orders': typeof ApiBillingOrdersRoute
+  '/api/billing/plans': typeof ApiBillingPlansRoute
+  '/api/video/models': typeof ApiVideoModelsRoute
+  '/api/video/tasks': typeof ApiVideoTasksRouteWithChildren
+  '/api/webhooks/waffo': typeof ApiWebhooksWaffoRoute
+  '/api/video/tasks/$taskId': typeof ApiVideoTasksTaskIdRouteWithChildren
+  '/api/video/tasks/$taskId/download': typeof ApiVideoTasksTaskIdDownloadRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/dashboard' | '/api/auth/$'
+  fullPaths:
+    | '/'
+    | '/dashboard/billing'
+    | '/dashboard/video'
+    | '/dashboard'
+    | '/api/auth/$'
+    | '/api/billing/checkout'
+    | '/api/billing/orders'
+    | '/api/billing/plans'
+    | '/api/video/models'
+    | '/api/video/tasks'
+    | '/api/webhooks/waffo'
+    | '/api/video/tasks/$taskId'
+    | '/api/video/tasks/$taskId/download'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/dashboard' | '/api/auth/$'
-  id: '__root__' | '/' | '/dashboard/' | '/api/auth/$'
+  to:
+    | '/'
+    | '/dashboard/billing'
+    | '/dashboard/video'
+    | '/dashboard'
+    | '/api/auth/$'
+    | '/api/billing/checkout'
+    | '/api/billing/orders'
+    | '/api/billing/plans'
+    | '/api/video/models'
+    | '/api/video/tasks'
+    | '/api/webhooks/waffo'
+    | '/api/video/tasks/$taskId'
+    | '/api/video/tasks/$taskId/download'
+  id:
+    | '__root__'
+    | '/'
+    | '/dashboard/billing'
+    | '/dashboard/video'
+    | '/dashboard/'
+    | '/api/auth/$'
+    | '/api/billing/checkout'
+    | '/api/billing/orders'
+    | '/api/billing/plans'
+    | '/api/video/models'
+    | '/api/video/tasks'
+    | '/api/webhooks/waffo'
+    | '/api/video/tasks/$taskId'
+    | '/api/video/tasks/$taskId/download'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  DashboardBillingRoute: typeof DashboardBillingRoute
+  DashboardVideoRoute: typeof DashboardVideoRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
+  ApiBillingCheckoutRoute: typeof ApiBillingCheckoutRoute
+  ApiBillingOrdersRoute: typeof ApiBillingOrdersRoute
+  ApiBillingPlansRoute: typeof ApiBillingPlansRoute
+  ApiVideoModelsRoute: typeof ApiVideoModelsRoute
+  ApiVideoTasksRoute: typeof ApiVideoTasksRouteWithChildren
+  ApiWebhooksWaffoRoute: typeof ApiWebhooksWaffoRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -75,6 +214,62 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard/video': {
+      id: '/dashboard/video'
+      path: '/dashboard/video'
+      fullPath: '/dashboard/video'
+      preLoaderRoute: typeof DashboardVideoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/billing': {
+      id: '/dashboard/billing'
+      path: '/dashboard/billing'
+      fullPath: '/dashboard/billing'
+      preLoaderRoute: typeof DashboardBillingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/webhooks/waffo': {
+      id: '/api/webhooks/waffo'
+      path: '/api/webhooks/waffo'
+      fullPath: '/api/webhooks/waffo'
+      preLoaderRoute: typeof ApiWebhooksWaffoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/video/tasks': {
+      id: '/api/video/tasks'
+      path: '/api/video/tasks'
+      fullPath: '/api/video/tasks'
+      preLoaderRoute: typeof ApiVideoTasksRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/video/models': {
+      id: '/api/video/models'
+      path: '/api/video/models'
+      fullPath: '/api/video/models'
+      preLoaderRoute: typeof ApiVideoModelsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/billing/plans': {
+      id: '/api/billing/plans'
+      path: '/api/billing/plans'
+      fullPath: '/api/billing/plans'
+      preLoaderRoute: typeof ApiBillingPlansRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/billing/orders': {
+      id: '/api/billing/orders'
+      path: '/api/billing/orders'
+      fullPath: '/api/billing/orders'
+      preLoaderRoute: typeof ApiBillingOrdersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/billing/checkout': {
+      id: '/api/billing/checkout'
+      path: '/api/billing/checkout'
+      fullPath: '/api/billing/checkout'
+      preLoaderRoute: typeof ApiBillingCheckoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/auth/$': {
       id: '/api/auth/$'
       path: '/api/auth/$'
@@ -82,13 +277,58 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAuthSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/video/tasks/$taskId': {
+      id: '/api/video/tasks/$taskId'
+      path: '/$taskId'
+      fullPath: '/api/video/tasks/$taskId'
+      preLoaderRoute: typeof ApiVideoTasksTaskIdRouteImport
+      parentRoute: typeof ApiVideoTasksRoute
+    }
+    '/api/video/tasks/$taskId/download': {
+      id: '/api/video/tasks/$taskId/download'
+      path: '/download'
+      fullPath: '/api/video/tasks/$taskId/download'
+      preLoaderRoute: typeof ApiVideoTasksTaskIdDownloadRouteImport
+      parentRoute: typeof ApiVideoTasksTaskIdRoute
+    }
   }
 }
 
+interface ApiVideoTasksTaskIdRouteChildren {
+  ApiVideoTasksTaskIdDownloadRoute: typeof ApiVideoTasksTaskIdDownloadRoute
+}
+
+const ApiVideoTasksTaskIdRouteChildren: ApiVideoTasksTaskIdRouteChildren = {
+  ApiVideoTasksTaskIdDownloadRoute: ApiVideoTasksTaskIdDownloadRoute,
+}
+
+const ApiVideoTasksTaskIdRouteWithChildren =
+  ApiVideoTasksTaskIdRoute._addFileChildren(ApiVideoTasksTaskIdRouteChildren)
+
+interface ApiVideoTasksRouteChildren {
+  ApiVideoTasksTaskIdRoute: typeof ApiVideoTasksTaskIdRouteWithChildren
+}
+
+const ApiVideoTasksRouteChildren: ApiVideoTasksRouteChildren = {
+  ApiVideoTasksTaskIdRoute: ApiVideoTasksTaskIdRouteWithChildren,
+}
+
+const ApiVideoTasksRouteWithChildren = ApiVideoTasksRoute._addFileChildren(
+  ApiVideoTasksRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  DashboardBillingRoute: DashboardBillingRoute,
+  DashboardVideoRoute: DashboardVideoRoute,
   DashboardIndexRoute: DashboardIndexRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
+  ApiBillingCheckoutRoute: ApiBillingCheckoutRoute,
+  ApiBillingOrdersRoute: ApiBillingOrdersRoute,
+  ApiBillingPlansRoute: ApiBillingPlansRoute,
+  ApiVideoModelsRoute: ApiVideoModelsRoute,
+  ApiVideoTasksRoute: ApiVideoTasksRouteWithChildren,
+  ApiWebhooksWaffoRoute: ApiWebhooksWaffoRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

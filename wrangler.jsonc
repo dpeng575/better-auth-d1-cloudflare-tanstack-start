@@ -9,12 +9,15 @@
 	"compatibility_flags": [
 		"nodejs_compat"
 	],
-	"main": "@tanstack/react-start/server-entry",
+	"main": "./src/worker-entry.ts",
 	"observability": {
 		"enabled": true,
 	},
 	"placement": {
 		"mode": "smart"
+	},
+	"triggers": {
+		"crons": ["* * * * *"]
 	},
 	"d1_databases": [
 		{
@@ -31,13 +34,14 @@
 	//     "id": "YOUR_KV_NAMESPACE_ID",
 	//   },
 	// ],
-	// 创建 R2 存储桶后取消注释 (pnpm wrangler r2 bucket create your-bucket-name):
-	// "r2_buckets": [
-	//   {
-	//     "binding": "R2_BUCKET",
-	//     "bucket_name": "YOUR_R2_BUCKET_NAME",
-	//   },
-	// ],
+	// 视频成品存储。生产前执行: pnpm wrangler r2 bucket create tanstack-start-videos
+	// (本地 dev 由 miniflare 自动模拟,无需真实桶)
+	"r2_buckets": [
+		{
+			"binding": "R2_BUCKET",
+			"bucket_name": "tanstack-start-videos",
+		},
+	],
 	// IMPORTANT: Do NOT put BETTER_AUTH_SECRET in vars!
 	// Set it as a secret using: pnpm wrangler secret put BETTER_AUTH_SECRET
 	/**

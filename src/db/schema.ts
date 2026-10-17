@@ -18,6 +18,8 @@
 // Re-export all auth schema tables
 export * from "./auth.schema";
 
-// Re-export your custom schemas here:
-// export * from "./posts.schema";
-// export * from "./comments.schema";
+// Business schemas (AI video SaaS)
+export * from "./credits.schema";
+export * from "./video.schema";
+export * from "./providers.schema";
+export * from "./billing.schema";

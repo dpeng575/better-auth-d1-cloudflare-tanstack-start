@@ -3,11 +3,11 @@ import { drizzle } from "drizzle-orm/d1";
 import * as schema from "./schema";
 
 export async function getDb() {
-  // Initialize Drizzle with your D1 binding (e.g., "DB" or "DATABASE" from wrangler.toml)
+  // Ensure "DATABASE" matches your D1 binding name in wrangler.jsonc
   return drizzle(env.DATABASE, {
-    // Ensure "DATABASE" matches your D1 binding name in wrangler.toml
     schema,
-    logger: true, // Optional
+    // SQL logging is dev-only: it can leak user data into Workers logs
+    logger: process.env.NODE_ENV !== "production",
   });
 }
 

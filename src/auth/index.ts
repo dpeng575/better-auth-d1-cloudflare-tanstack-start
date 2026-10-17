@@ -10,6 +10,7 @@ import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { anonymous, openAPI } from "better-auth/plugins";
 import { tanstackStartCookies } from "better-auth/tanstack-start";
 import { drizzle } from "drizzle-orm/d1";
+import { grantCredits, SIGNUP_BONUS_CREDITS } from "@/server/credits";
 import * as schema from "../db/schema";
 
 export interface CloudflareBindings {
@@ -17,6 +18,11 @@ export interface CloudflareBindings {
   KV: KVNamespace;
   R2_BUCKET: R2Bucket;
   BETTER_AUTH_SECRET: string;
+  PUBLIC_URL?: string;
+  /** Waffo payment (set via `wrangler secret put`). */
+  WAFFO_API_KEY?: string;
+  WAFFO_PUBLIC_KEY?: string;
+  WAFFO_API_URL?: string;
 }
 
 // Single auth configuration that handles both CLI and runtime scenarios
@@ -26,7 +32,11 @@ function createAuth(
 ) {
   // Use actual DB for runtime, empty object for CLI
   const db = env
-    ? drizzle(env.DATABASE, { schema, logger: true })
+    ? drizzle(env.DATABASE, {
+        schema,
+        // SQL logging is dev-only: it can leak user data into Workers logs
+        logger: process.env.NODE_ENV !== "production",
+      })
     : ({} as any);
 
   return betterAuth({
@@ -83,6 +93,23 @@ function createAuth(
             "/sign-in/social": {
               window: 60,
               max: 100,
+            },
+          },
+        },
+        databaseHooks: {
+          user: {
+            create: {
+              // Grant the signup bonus atomically; the unique idempotency key
+              // makes this safe even if user creation is ever retried.
+              after: async (user: { id: string }) => {
+                if (!env?.DATABASE) return;
+                await grantCredits(env.DATABASE as any, {
+                  userId: user.id,
+                  amount: SIGNUP_BONUS_CREDITS,
+                  reason: "signup_bonus",
+                  idempotencyKey: `signup_bonus:${user.id}`,
+                });
+              },
             },
           },
         },
