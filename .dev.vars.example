@@ -1,0 +1,13 @@
+# Local Cloudflare Worker secrets (copy to .dev.vars)
+# https://developers.cloudflare.com/workers/configuration/secrets/#local-development
+
+# Generate a random secret: openssl rand -base64 32
+BETTER_AUTH_SECRET=your_secret_here
+
+# Resend (email OTP login). Without these the OTP is logged to the
+# worker console instead of being emailed — enough for local testing.
+# API key: https://resend.com/api-keys
+RESEND_API_KEY=re_xxxxxxxxxxxx
+# Test sender provided by Resend (can only email your own account).
+# Replace with your verified domain before production, e.g. no-reply@yourdomain.com
+EMAIL_FROM=onboarding@resend.dev

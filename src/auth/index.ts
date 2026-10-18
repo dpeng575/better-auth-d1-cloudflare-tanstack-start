@@ -7,7 +7,7 @@ import type {
 import { betterAuth } from "better-auth";
 import { withCloudflare } from "better-auth-cloudflare";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { anonymous, openAPI } from "better-auth/plugins";
+import { anonymous, emailOTP, openAPI } from "better-auth/plugins";
 import { tanstackStartCookies } from "better-auth/tanstack-start";
 import { drizzle } from "drizzle-orm/d1";
 import { grantCredits, SIGNUP_BONUS_CREDITS } from "@/server/credits";
@@ -19,6 +19,9 @@ export interface CloudflareBindings {
   R2_BUCKET: R2Bucket;
   BETTER_AUTH_SECRET: string;
   PUBLIC_URL?: string;
+  /** Resend (email OTP delivery, set via `wrangler secret put`). */
+  RESEND_API_KEY?: string;
+  EMAIL_FROM?: string;
   /** Waffo payment (set via `wrangler secret put`). */
   WAFFO_API_KEY?: string;
   WAFFO_PUBLIC_KEY?: string;
@@ -116,6 +119,37 @@ function createAuth(
         plugins: [
           tanstackStartCookies(), // CRITICAL for TanStack Start
           anonymous(),
+          emailOTP({
+            // Default is 300 (5 minutes); stated explicitly for the email copy below.
+            expiresIn: 5 * 60,
+            sendVerificationOTP: async ({ email, otp, type }) => {
+              if (!env?.RESEND_API_KEY || !env?.EMAIL_FROM) {
+                // No Resend credentials (e.g. local dev): log the code instead
+                // of failing the sign-in flow.
+                console.log(`[email-otp] ${type} code for ${email}: ${otp}`);
+                return;
+              }
+              const res = await fetch("https://api.resend.com/emails", {
+                method: "POST",
+                headers: {
+                  Authorization: `Bearer ${env.RESEND_API_KEY}`,
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  from: env.EMAIL_FROM,
+                  to: email,
+                  subject: "Your login code",
+                  text: `Your login code is ${otp}. It expires in 5 minutes. If you didn't request it, ignore this email.`,
+                }),
+              });
+              if (!res.ok) {
+                console.error(
+                  `[email-otp] Resend delivery failed (${res.status}):`,
+                  await res.text()
+                );
+              }
+            },
+          }),
           openAPI(),
         ],
       }

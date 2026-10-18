@@ -1,0 +1,26 @@
+# Cloudflare D1 Configuration (for drizzle-kit migrations)
+# Get these values from your Cloudflare dashboard
+
+# Account ID: https://dash.cloudflare.com/ (right sidebar)
+CLOUDFLARE_ACCOUNT_ID=your_account_id_here
+
+# Database ID: Run `pnpm wrangler d1 create your-database-name` and copy the ID
+CLOUDFLARE_DATABASE_ID=your_database_id_here
+
+# API Token: https://dash.cloudflare.com/profile/api-tokens
+# Required permissions: D1:Edit, Workers:Edit
+CLOUDFLARE_D1_TOKEN=your_d1_api_token_here
+
+# Better Auth Configuration
+# Generate a random secret: openssl rand -base64 32
+BETTER_AUTH_SECRET=your_secret_here
+
+# Public URL (for server-side auth)
+# Local development: http://localhost:3000
+# Production: https://your-worker-name.your-subdomain.workers.dev
+PUBLIC_URL=http://localhost:3000
+
+# Email OTP login (Resend) — see .dev.vars.example for local setup
+# Production: pnpm wrangler secret put RESEND_API_KEY / EMAIL_FROM
+RESEND_API_KEY=your_resend_api_key_here
+EMAIL_FROM=onboarding@resend.dev
