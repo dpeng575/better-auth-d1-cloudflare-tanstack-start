@@ -108,6 +108,12 @@ function createAuth(
               window: 60,
               max: 100,
             },
+            // Each send costs a Resend email; keep this tight so the
+            // quota can't be drained by a single client.
+            "/email-otp/send-verification-otp": {
+              window: 60,
+              max: 3,
+            },
           },
         },
         databaseHooks: {

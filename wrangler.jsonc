@@ -27,13 +27,13 @@
 			"migrations_dir": "drizzle",
 		},
 	],
-	// 创建 KV 命名空间后取消注释 (pnpm wrangler kv namespace create KV):
-	// "kv_namespaces": [
-	//   {
-	//     "binding": "KV",
-	//     "id": "YOUR_KV_NAMESPACE_ID",
-	//   },
-	// ],
+	// 用于 better-auth 分布式限流 (rate limit)
+	"kv_namespaces": [
+		{
+			"binding": "KV",
+			"id": "a7703d8d01e140fe8452921c6946f6d6",
+		},
+	],
 	// 视频成品存储。生产前执行: pnpm wrangler r2 bucket create tanstack-start-videos
 	// (本地 dev 由 miniflare 自动模拟,无需真实桶)
 	"r2_buckets": [
