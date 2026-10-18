@@ -22,6 +22,9 @@ export interface CloudflareBindings {
   /** Resend (email OTP delivery, set via `wrangler secret put`). */
   RESEND_API_KEY?: string;
   EMAIL_FROM?: string;
+  /** Google OAuth (set via `wrangler secret put`). */
+  GOOGLE_CLIENT_ID?: string;
+  GOOGLE_CLIENT_SECRET?: string;
   /** Waffo payment (set via `wrangler secret put`). */
   WAFFO_API_KEY?: string;
   WAFFO_PUBLIC_KEY?: string;
@@ -83,6 +86,14 @@ function createAuth(
         emailAndPassword: {
           enabled: true,
         },
+        socialProviders: env?.GOOGLE_CLIENT_ID
+          ? {
+              google: {
+                clientId: env.GOOGLE_CLIENT_ID,
+                clientSecret: env.GOOGLE_CLIENT_SECRET || "",
+              },
+            }
+          : undefined,
         rateLimit: {
           enabled: true,
           window: 60, // Minimum KV TTL is 60s
